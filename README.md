@@ -5,7 +5,7 @@
 -   [What Do Code Reviewers Look For?](#what-do-code-reviewers-look-for)
 -   [Style Guidelines](#style-guidelines), on how to organize your source code.
 -   [Git Workflow](#git-workflow) discusses how our workflow has changed now that Mono is hosted on GitHub.
--   [Best Practices](#best-practices), used in the project.
+<!-- -   [Best Practices](#best-practices), used in the project. -->
 
 What Do Code Reviewers Look For?
 ================================
@@ -95,7 +95,7 @@ const output = '\ufeff' + content;
 Comments & Documentation
 ------------------------
 
-#### JSDoc vs comments
+### JSDoc vs comments
 There are two types of comments, JSDoc (`/** ... */`) and non-JSDoc ordinary comments (`// ...` or `/* ... */`).
 
 Use `/** JSDoc */` comments for documentation, i.e. comments a user of the code should read.
@@ -103,21 +103,21 @@ Use // line comments for implementation comments, i.e. comments that only concer
 
 JSDoc comments are understood by tools (such as editors and documentation generators), while ordinary comments are only for other humans.
 
-#### JSDoc rules follow the JavaScript style
+### JSDoc rules follow the JavaScript style
 The style-guide for jsDocs cab ve found [here](js-docs.md) 
 
-#### Document all top-level exports of modules
+### Document all top-level exports of modules
 Use /** JSDoc */ comments to communicate information to the users of your code. Avoid merely restating the property or parameter name. You should also document all properties and methods (exported/public or not) whose purpose is not immediately obvious from their name, as judged by your reviewer.
 
-#### Omit comments that are redundant with TypeScript
+### Omit comments that are redundant with TypeScript
 For example, do not declare types in @param or @return blocks, do not write @implements, @enum, @private etc. on code that uses the implements, enum, private etc. keywords.
 
-#### Do not use @override
-Do not use @override in TypeScript source code.
+### Do not use `@override`
+Do not use `@override` in TypeScript source code.
 
-@override is not enforced by the compiler, which is surprising and leads to annotations and implementation going out of sync. Including it purely for documentation purposes is confusing.
+`@override` is not enforced by the compiler, which is surprising and leads to annotations and implementation going out of sync. Including it purely for documentation purposes is confusing.
 
-#### Make comments that actually add information
+### Make comments that actually add information
 For non-exported symbols, sometimes the name and type of the function or parameter is enough. Code will usually benefit from more documentation than just variable names though!
 
 Avoid comments that just restate the parameter name and type, e.g.
@@ -136,7 +136,7 @@ brew(amountLitres: number, logger: Logger) {
 }
 ```
 
-#### Parameter property comments
+### Parameter property comments
 A parameter property is when a class declares a field and a constructor parameter in a single declaration, by marking a parameter in the constructor. E.g. constructor(private readonly foo: Foo), declares that the class has a foo field.
 
 To document these fields, use JSDoc's @param annotation. Editors display the description on constructor calls and property accesses.
@@ -165,7 +165,7 @@ class OrdinaryClass {
 }
 ```
 
-#### Comments when calling a function
+### Comments when calling a function
 If needed, document parameters at call sites inline using block comments. Also consider named parameters using object literals and destructuring. The exact formatting and placement of the comment is not prescribed.
 ```ts
 // Inline block comments for parameters that'd be hard to understand:
@@ -174,7 +174,7 @@ new Percolator().brew(/* amountLitres= */ 5);
 new Percolator().brew({amountLitres: 5});
 ```
 
-#### Place documentation prior to decorators
+### Place documentation prior to decorators
 When a class, method, or property have both decorators like `@Component` and JsDoc, please make sure to write the JsDoc before the decorator.
 
 Do not write JsDoc between the Decorator and the decorated statement.
@@ -230,5 +230,5 @@ the naming standard for creating feature branches will follow the format of pref
 keyword then followed by the work item name, which looks like this format -
 `feature/feature-name/`. A more valid examples are as follows `feature/validations` or `feature/login` or `feature/collections-revert`
 
-#### Branch Naming
+### Branch Naming
 Please ensure the branch naming follows a small case and hyphen spaces convention e.g `branch-name1`, `branch-name2`, `another-branch-name`
