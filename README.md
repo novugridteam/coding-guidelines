@@ -103,8 +103,8 @@ Use // line comments for implementation comments, i.e. comments that only concer
 
 JSDoc comments are understood by tools (such as editors and documentation generators), while ordinary comments are only for other humans.
 
-### JSDoc rules follow the JavaScript style
-The style-guide for jsDocs cab ve found [here](js-docs.md) 
+### JSDoc rules
+The style-guide for jsDocs can be found [here](js-docs.md). Exceptions to those rules may be found below
 
 ### Document all top-level exports of modules
 Use /** JSDoc */ comments to communicate information to the users of your code. Avoid merely restating the property or parameter name. You should also document all properties and methods (exported/public or not) whose purpose is not immediately obvious from their name, as judged by your reviewer.
