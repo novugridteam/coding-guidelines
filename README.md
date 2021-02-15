@@ -110,7 +110,7 @@ The style-guide for jsDocs can be found [here](js-docs.md). Exceptions to those 
 Use /** JSDoc */ comments to communicate information to the users of your code. Avoid merely restating the property or parameter name. You should also document all properties and methods (exported/public or not) whose purpose is not immediately obvious from their name, as judged by your reviewer.
 
 ### Omit comments that are redundant with TypeScript
-For example, do not declare types in @param or @return blocks, do not write @implements, @enum, @private etc. on code that uses the implements, enum, private etc. keywords.
+For example, do not declare types in `@param` or `@return` blocks, do not write @implements, @enum, @private etc. on code that uses the implements, enum, private etc. keywords.
 
 ### Do not use `@override`
 Do not use `@override` in TypeScript source code.
@@ -125,7 +125,7 @@ Avoid comments that just restate the parameter name and type, e.g.
 /** @param fooBarService The Bar service for the Foo application. */
 ```
 
-Because of this rule, @param and @return lines are only required when they add information, and may otherwise be omitted.
+Because of this rule, `@param` and `@return` lines are only required when they add information, and may otherwise be omitted.
 ``` ts
 /**
  * POSTs the request to start coffee brewing.
@@ -139,7 +139,7 @@ brew(amountLitres: number, logger: Logger) {
 ### Parameter property comments
 A parameter property is when a class declares a field and a constructor parameter in a single declaration, by marking a parameter in the constructor. E.g. constructor(private readonly foo: Foo), declares that the class has a foo field.
 
-To document these fields, use JSDoc's @param annotation. Editors display the description on constructor calls and property accesses.
+To document these fields, use JSDoc's `@param` annotation. Editors display the description on constructor calls and property accesses.
 ```ts
 /** This class demonstrates how parameter properties are documented. */
 class ParamProps {
@@ -270,11 +270,9 @@ side-effect   |`import '...';`	              |Only to import libraries for their
 
 
 ``` ts
-// Good: choose between two options as appropriate (see below).
+// Good: choose between the options as appropriate (see below).
 import * as ng from '@angular/core';
 import {Foo} from './foo';
-
-// Only when needed: default imports.
 import Button from 'Button';
 
 // Sometimes needed to import libraries for their side effects:
