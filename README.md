@@ -43,14 +43,14 @@ Identifiers must use only ASCII letters, digits, underscores (for constants and 
 -   **`_` prefix/suffix:** Identifiers must not use `_` as a prefix or suffix. This also means that `_` must not be used as an identifier by itself (e.g. to indicate a parameter is unused).
 -   Imports: Module namespace imports are lowerCamelCase while files are snake_case, which means that imports correctly will not match in casing style, such as
 
-``` js
-import * as fooBar from './foo_bar';
-```
+    ``` js
+    import * as fooBar from './foo_bar';
+    ```
 
-Some libraries might commonly use a namespace import prefix that violates this naming scheme, but overbearingly common open source use makes the violating style more readable. The only libraries that currently fall under this exception are:
+    Some libraries might commonly use a namespace import prefix that violates this naming scheme, but overbearingly common open source use makes the violating style more readable. The only libraries that currently fall under this exception are:
 
-...-   jquery, using the $ prefix
-...-   threejs, using the THREE prefix
+    -   jquery, using the $ prefix
+    -   threejs, using the THREE prefix
 
 Naming style
 ------------
@@ -70,6 +70,133 @@ Names must be descriptive and clear to a new reader. Do not use abbreviations th
 
 -   **Exception:** Variables that are in scope for 10 lines or fewer, including arguments that are not part of an exported API, may use short (e.g. single letter) variable names.
 
+File encoding: UTF-8
+--------------------
+For non-ASCII characters, use the actual Unicode character (e.g. `∞`). For non-printable characters, the equivalent hex or Unicode escapes (e.g. `\u221e`) can be used along with an explanatory comment.
+
+Good: 
+``` js
+// Perfectly clear, even without a comment.
+const units = 'μs';
+
+// Use escapes for non-printable characters.
+const output = '\ufeff' + content;  // byte order mark
+```
+
+Bad:
+``` js
+// Hard to read and prone to mistakes, even with the comment.
+const units = '\u03bcs'; // Greek letter mu, 's'
+
+// The reader has no idea what this is.
+const output = '\ufeff' + content;
+```
+
+Comments & Documentation
+------------------------
+
+#### JSDoc vs comments
+There are two types of comments, JSDoc (`/** ... */`) and non-JSDoc ordinary comments (`// ...` or `/* ... */`).
+
+Use `/** JSDoc */` comments for documentation, i.e. comments a user of the code should read.
+Use // line comments for implementation comments, i.e. comments that only concern the implementation of the code itself.
+
+JSDoc comments are understood by tools (such as editors and documentation generators), while ordinary comments are only for other humans.
+
+#### JSDoc rules follow the JavaScript style
+The style-guide for jsDocs cab ve found [here](js-docs.md) 
+
+#### Document all top-level exports of modules
+Use /** JSDoc */ comments to communicate information to the users of your code. Avoid merely restating the property or parameter name. You should also document all properties and methods (exported/public or not) whose purpose is not immediately obvious from their name, as judged by your reviewer.
+
+#### Omit comments that are redundant with TypeScript
+For example, do not declare types in @param or @return blocks, do not write @implements, @enum, @private etc. on code that uses the implements, enum, private etc. keywords.
+
+#### Do not use @override
+Do not use @override in TypeScript source code.
+
+@override is not enforced by the compiler, which is surprising and leads to annotations and implementation going out of sync. Including it purely for documentation purposes is confusing.
+
+#### Make comments that actually add information
+For non-exported symbols, sometimes the name and type of the function or parameter is enough. Code will usually benefit from more documentation than just variable names though!
+
+Avoid comments that just restate the parameter name and type, e.g.
+``` ts
+/** @param fooBarService The Bar service for the Foo application. */
+```
+
+Because of this rule, @param and @return lines are only required when they add information, and may otherwise be omitted.
+``` ts
+/**
+ * POSTs the request to start coffee brewing.
+ * @param amountLitres The amount to brew. Must fit the pot size!
+ */
+brew(amountLitres: number, logger: Logger) {
+  // ...
+}
+```
+
+#### Parameter property comments
+A parameter property is when a class declares a field and a constructor parameter in a single declaration, by marking a parameter in the constructor. E.g. constructor(private readonly foo: Foo), declares that the class has a foo field.
+
+To document these fields, use JSDoc's @param annotation. Editors display the description on constructor calls and property accesses.
+```ts
+/** This class demonstrates how parameter properties are documented. */
+class ParamProps {
+  /**
+   * @param percolator The percolator used for brewing.
+   * @param beans The beans to brew.
+   */
+  constructor(
+    private readonly percolator: Percolator,
+    private readonly beans: CoffeeBean[]) {}
+}
+```
+
+```ts
+/** This class demonstrates how ordinary fields are documented. */
+class OrdinaryClass {
+  /** The bean that will be used in the next call to brew(). */
+  nextBean: CoffeeBean;
+
+  constructor(initialBean: CoffeeBean) {
+    this.nextBean = initialBean;
+  }
+}
+```
+
+#### Comments when calling a function
+If needed, document parameters at call sites inline using block comments. Also consider named parameters using object literals and destructuring. The exact formatting and placement of the comment is not prescribed.
+```ts
+// Inline block comments for parameters that'd be hard to understand:
+new Percolator().brew(/* amountLitres= */ 5);
+// Also consider using named arguments and destructuring parameters (in brew's declaration):
+new Percolator().brew({amountLitres: 5});
+```
+
+#### Place documentation prior to decorators
+When a class, method, or property have both decorators like `@Component` and JsDoc, please make sure to write the JsDoc before the decorator.
+
+Do not write JsDoc between the Decorator and the decorated statement.
+``` ts
+@Component({
+  selector: 'foo',
+  template: 'bar',
+})
+/** Component that prints "bar". */
+export class FooComponent {}
+```
+Write the JsDoc block before the Decorator.
+
+``` ts
+/** Component that prints "bar". */
+@Component({
+  selector: 'foo',
+  template: 'bar',
+})
+export class FooComponent {}
+```
+
 Indentation
 -----------
 
@@ -86,6 +213,7 @@ Fast code that is difficult to maintain is likely going to be looked down upon.
 
 Git Workflow
 ====================
+We would be using the [Github flow](https://guides.github.com/introduction/flow/)
 
 One Line Summaries
 ------------------
@@ -94,7 +222,13 @@ Before your full commit message, use a one-line summary of the change as this im
 
 After this one line change, you can add the regular, full-documented version of the change.
 
-Personal Work Branches
-----------------------
+Feature Branches
+----------------
 
-blah blah blah
+You should create a feature branch for your work.
+the naming standard for creating feature branches will follow the format of prefixing the branch name with the feature
+keyword then followed by the work item name, which looks like this format -
+`feature/feature-name/`. A more valid examples are as follows `feature/validations` or `feature/login` or `feature/collections-revert`
+
+#### Branch Naming
+Please ensure the branch naming follows a small case and hyphen spaces convention e.g `branch-name1`, `branch-name2`, `another-branch-name`
