@@ -211,8 +211,83 @@ It is more important to be maintainable than to be fast.
 
 Fast code that is difficult to maintain is likely going to be looked down upon.
 
+Source Organization
+------------------
+### Modules
+#### Import Paths
+TypeScript code must use paths to import other TypeScript code. Paths may be relative, i.e. starting with `.` or `..`, or rooted at the base directory, e.g. `root/path/to/file`.
+
+Code should use relative imports (`./foo`) rather than absolute imports `path/to/foo` when referring to files within the same (logical) project.
+
+Consider limiting the number of parent steps (`../../../`) as those can make module and path structures hard to understand.
+``` ts
+import {Symbol1} from 'google3/path/from/root';
+import {Symbol2} from '../parent/file';
+import {Symbol3} from './sibling';
+```
+
+#### Namespaces vs Modules
+TypeScript supports two methods to organize code: namespaces and modules, but namespaces are disallowed. google3 code must use TypeScript modules (which are ECMAScript 6 modules). That is, your code must refer to code in other files using imports and exports of the form import {foo} from 'bar';
+
+Your code must not use the namespace Foo { ... } construct. namespaces may only be used when required to interface with external, third party code. To semantically namespace your code, use separate files.
+
+Code must not use require (as in import x = require('...');) for imports. Use ES6 module syntax.
+
+``` ts
+// Bad: do not use namespaces:
+namespace Rocket {
+  function launch() { ... }
+}
+
+// Bad: do not use <reference>
+/// <reference path="..."/>
+
+// Bad: do not use require()
+import x = require('mydep');
+```
+
+NB: TypeScript namespaces used to be called internal modules and used to use the module keyword in the form `module Foo { ... }`. Don't use that either. Always use ES6 imports.
+
+### Exports
+Use named exports in all code:
+
+``` ts
+// Use named exports:
+export class Foo { ... }
+Do not use default exports. This ensures that all imports follow a uniform pattern.
+```
+
+
+### Imports
+There are four variants of import statements in ES6 and TypeScript:
+
+| Import type | Example                       | Use for |
+| ----------- | --------------                |  -----  |
+| module	    |`import * as foo from '...';`  |	TypeScript imports |
+destructuring |`import {SomeThing} from '...';`|	TypeScript imports|
+default	      |`import SomeThing from '...';`	|TypeScript imports|
+side-effect   |`import '...';`	              |Only to import libraries for their side-effects on load (such as custom elements)|
+
+
+``` ts
+// Good: choose between two options as appropriate (see below).
+import * as ng from '@angular/core';
+import {Foo} from './foo';
+
+// Only when needed: default imports.
+import Button from 'Button';
+
+// Sometimes needed to import libraries for their side effects:
+import 'jasmine';
+import '@polymer/paper-button';
+```
+
+### Organize By Features
+
+Organize packages by feature, not by type. For example, an online shop should have packages named `products`, `checkout`, `categories`, not `views`, `models`, `controllers`.
+
 Git Workflow
-====================
+============
 We would be using the [Github flow](https://guides.github.com/introduction/flow/)
 
 One Line Summaries
